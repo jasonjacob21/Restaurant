@@ -1,0 +1,13 @@
+.Menu h1{
+  font-weight: 700;
+}
+.Menu img{
+  width: 197px;
+  height: 255px;
+}
+.card:hover{
+  -webkit-box-shadow: 0px 1px 19px 12px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 1px 19px 12px rgba(0,0,0,0.75);
+box-shadow: 0px 1px 19px 12px rgba(0,0,0,0.75);
+transition: 0.5s;
+}

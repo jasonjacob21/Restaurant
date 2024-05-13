@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management System - Employee Page</title>
+    <link rel="stylesheet" href="/styles/emp.css">
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body id="emp-dashb">
+<div class="container" >
+  <aside class="sidebar" >
+      <ul>
+          <li><a href="/employee">Profile</a></li>
+          <li><a href="/Order-D">Orders</a></li>
+         
+          <li><a href="/Contact-E">Contact Form</a></li>
+          <li><a href="/Res">Reservations</a></li>
+          
+          <li><a href="/">Logout</a></li>
+      </ul>
+  </aside>
+  <main class="main-content" >
+    <div class="container" id="res-disp">
+      <h2>Reservation Details</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Count</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <% for(let resv of listItems){%>
+        <tbody>
+          <tr>
+            <td><%= resv.id %></td>
+            <td><%= resv.name %></td>
+            <td><%= resv.email %></td>
+            <td><%= resv.phone %></td>
+            <td><%= resv.count %></td>
+            <td><%= resv.date %></td>
+            <td><%= resv.time %></td>
+            <td><%= resv.reservation_timestamp %></td>
+          </tr>
+        </tbody>
+        <% } %>
+      </table>
+    </div>
+  
+  </main>
+</div>
+
+</body>
+</html>

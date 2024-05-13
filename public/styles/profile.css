@@ -1,0 +1,40 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.profile-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.profile-info h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+.profile-info p {
+    font-size: 18px;
+    margin: 5px 0;
+}
+@media only screen and (max-width: 600px) {
+    .container {
+        margin: 20px auto;
+        padding: 10px;
+    }
+    .profile-info h1 {
+        font-size: 24px;
+    }
+    .profile-info p {
+        font-size: 16px;
+    }
+}

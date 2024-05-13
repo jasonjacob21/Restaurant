@@ -1,0 +1,67 @@
+<%- include("Partials/header-u.ejs") %>
+
+
+<section class="header main-title">
+    <div class="container">
+        <div class="row mb-3 text-center d-flex justify-content-center align-items-center title-1 ">
+            <div class="col-md-6 themed-grid-col ">
+              <div class="head-left-side ">
+                <h1  class="heading">Welcome To Buena Comida</h1>
+                <h2 id="second-heading"><%= user.username %></h2>
+              </div>
+            </div>
+            <div class="col-md-6 themed-grid-col  ">
+                <div class="head-right-side  ">
+                    <img src="/images/menu/pizzac.png" alt="Chicken barbique" class="img-fluid float-end rotate" height="500px" " srcset="">
+                </div>  
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <section class="about">
+      <div class="container-fluid">
+        <div  class=" row">
+          <div class=" col-lg-6 col-sm-12 images">
+              
+              <div class="about-left-side">
+                <img src="/images/menu/img1.jpeg" alt="outside" class="about-img1">
+                <img src="/images/menu/img2.jpeg" alt="inside restaurant" class="about-img2"> <br />
+                <img src="/images/menu/images3.jpeg" alt="food" class="about-img3">
+                <img src="/images/two.jpg" alt="kitchen" class="about-img4">
+          </div>
+
+          </div>
+          <div class=" col-lg-6 col-sm-12 images-info">
+            <div class="about-right-side">
+              <h3 class="py-5">About Us <span></span></h3>
+              <p >Welcome to Buena Comida!, where elegance meets excitement in every bite. Nestled in the heart of Mumbai,
+                  our restaurant is a haven for those who appreciate the finer things in life. Step into a world where the
+                  ambiance is as inviting as the menu is tantalizing, creating a perfect blend of sophistication and fun.
+                  Our culinary team is dedicated to crafting a menu that showcases the finest ingredients, ensuring each
+                  dish is a masterpiece of flavor and presentation.  </p>
+              <div class="flex counter">
+                  <div class="flex">
+                      <span></span>
+                      <h2 class="counter-value" data-target="15">15</h2>
+                      <h4>
+                          Years Of Experience</h4>
+                  </div>
+                  <div class="flex">
+                      <span></span>
+                      <h2 class="counter-value" data-target="50">50</h2>
+                      <h4>Popular Chefs</h4>
+                  </div>
+  
+              </div>
+            </div> 
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+
+
+
+<%- include("Partials/footer.ejs") %>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management System - Employee Page</title>
+    <link rel="stylesheet" href="/styles/emp.css">
+</head>
+<body id="emp-dashb">
+
+<div class="container" id="emp-dashb">
+    <aside class="sidebar" id="emp-dashb">
+        <ul>
+            <li><a href="/employee">Profile</a></li>
+            <li><a href="/Order-D">Orders</a></li>
+            
+            <li><a href="/Contact-E">Contact Form</a></li>
+            <li><a href="/Res">Reservations</a></li>
+           
+            <li><a href="/">Logout</a></li>
+        </ul>
+    </aside>
+    <main class="main-content" id="emp-dashb">
+        <h2>Welcome, <%= user.first_name %> <%= user.last_name %></h2>
+        <div class="employee-info">
+            <p><strong>Employee ID:</strong> <%= user.employee_id %></p>
+            <p><strong>Position:</strong> <%= user.profession %></p>
+            <p><strong>Shift:</strong> Morning</p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Phone:</strong> <%= user.m_number %></p>
+        </div>
+    </main>
+    
+</div>
+
+</body>
+</html>

@@ -1,0 +1,2169 @@
+ <main class="main-content">
+            <h2>Welcome, <%= f_name %>  <%= l_name %></h2>
+            <div class="employee-info">
+                <p><strong>Employee ID:</strong> <%=  employee_id %></p>
+                <p><strong>Position:</strong> <%= profession %></p>
+                <p><strong>Shift:</strong> Morning</p>
+                <p><strong>Email:</strong> <%= email  %> </p>
+                <p><strong>Phone:</strong> <%= m_number  %> </p>
+            </div>
+        </main>
+
+
+
+          const currentDate = new Date().toISOString().slice(0, 10);
+
+  const result = await db.query('SELECT * FROM reservations WHERE date = $1 ORDER BY id DESC' , [currentDate]);
+
+  const res_data = result.rows;
+  
+
+  res.render("emp_resrvation.ejs", {
+   res_list: res_data,
+  });
+
+
+
+
+   <% for(let resv of listItems){%>
+        
+        <p >
+          "Name :"  <%= resv.name %>
+          
+        </p>
+
+
+        <% } %>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservation Table</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <link rel="stylesheet" href="/styles/navbar.css"> 
+
+</head>
+
+
+<body id="res-disp">
+
+  
+  <%- include("Partials/navbar.ejs") %>
+
+  <div class="container">
+    <h2>Reservation Details</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Count</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <% for(let resv of listItems){%>
+      <tbody>
+        <tr>
+          <td><%= resv.id %></td>
+          <td><%= resv.name %></td>
+          <td><%= resv.email %></td>
+          <td><%= resv.phone %></td>
+          <td><%= resv.count %></td>
+          <td><%= resv.date %></td>
+          <td><%= resv.time %></td>
+          <td><%= resv.reservation_timestamp %></td>
+        </tr>
+      </tbody>
+      <% } %>
+    </table>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const cartItemsList = document.querySelector('.cart-items');
+    const totalPriceSpan = document.getElementById('total-price');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    let cart = [];
+
+    cartCloseBtn.addEventListener('click', () => {
+        cartSidebar.style.right = '-300px'; // Close the cart sidebar
+    });
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const itemId = button.getAttribute('data-id');
+            const itemName = button.parentElement.querySelector('h3').innerText;
+            const itemPrice = parseFloat(button.parentElement.querySelector('p').innerText.replace('$', ''));
+            const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+            
+            const item = {
+                id: itemId,
+                name: itemName,
+                price: itemPrice,
+                quantity: itemQuantity
+            };
+
+            // Check if item already exists in cart
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+            if (existingItem) {
+                existingItem.quantity += item.quantity;
+            } else {
+                cart.push(item);
+            }
+
+            updateCartUI();
+        });
+    });
+
+    function updateCartUI() {
+        cartItemsList.innerHTML = '';
+        let totalPrice = 0;
+
+        cart.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${item.name} x ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`;
+            cartItemsList.appendChild(li);
+
+            totalPrice += item.price * item.quantity;
+        });
+
+        totalPriceSpan.textContent = totalPrice.toFixed(2);
+        cartSidebar.style.right = '0'; // Open the cart sidebar
+    }
+
+    checkoutBtn.addEventListener('click', () => {
+        // Handle checkout process (redirect to checkout page, etc.)
+        console.log('Proceeding to checkout...');
+    });
+});
+
+
+
+
+
+//checkout button // ...
+
+checkoutBtn.addEventListener('click', () => {
+  // Send a POST request to the /checkout route
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/checkout');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      // Redirect to the success page if the order is successful
+      window.location.href = '/success';
+    } else {
+      // Redirect to the failure page if there's an error
+      window.location.href = '/failure';
+    }
+  };
+  xhr.send(JSON.stringify({
+    customer_name: document.getElementById('customer_name').value,
+    customer_email: document.getElementById('customer_email').value,
+    order_items: JSON.stringify(cart),
+    total_amount: parseFloat(totalPriceSpan.textContent),
+  }));
+});
+
+// menu - testing  backup 
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <h2>Menu</h2>
+        <div class="menu-items">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>$<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                    <input type="number" min="1" value="1" class="quantity-input">
+                    <!-- Use data attributes to store item ID and price -->
+                    <button class="add-to-cart" data-id="<%= item.id %>" data-name="<%= item.name %>" data-price="<%= item.price %>">Add to Cart</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart">
+            <span class="cart-close-btn" id="cart-close-btn">&times;</span>
+            <h3>Cart</h3>
+            <ul class="cart-items" id="cart-items"></ul>
+            <p>Total: $<span id="total-price">0.00</span></p>
+            <button id="checkout-btn" onclick="handleCheckout()">Checkout</button>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const cartItemsList = document.getElementById('cart-items');
+    const totalPriceSpan = document.getElementById('total-price');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    let cart = [];
+
+    cartCloseBtn.addEventListener('click', () => {
+        cartSidebar.style.right = '-300px'; // Close the cart sidebar
+    });
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const itemId = button.getAttribute('data-id');
+            const itemName = button.getAttribute('data-name');
+            const itemPrice = parseFloat(button.getAttribute('data-price')); // Parse float from data-price
+            const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+            
+            const item = {
+                id: itemId,
+                name: itemName,
+                price: itemPrice,
+                quantity: itemQuantity
+            };
+
+            cart.push(item); // Push the item to the cart array
+
+            updateCartUI();
+        });
+    });
+
+    
+    function updateCartUI() {
+    cartItemsList.innerHTML = '';
+    let totalPrice = 0;
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        const itemName = `${item.name} x ${item.quantity}`;
+        const itemPrice = (item.price * item.quantity).toFixed(2);
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.classList.add('remove-item');
+        removeBtn.setAttribute('data-id', item.id);
+
+        removeBtn.addEventListener('click', () => {
+    const itemId = removeBtn.getAttribute('data-id');
+    // Find the index of the item in the cart array
+    const index = cart.findIndex(cartItem => cartItem.id === itemId);
+    if (index !== -1) {
+        // Remove the item from the cart array using splice
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+});
+
+        li.textContent = `${itemName} - $${itemPrice}`;
+        li.appendChild(removeBtn);
+        cartItemsList.appendChild(li);
+
+        totalPrice += parseFloat(itemPrice); // Accumulate the total price
+    });
+
+    totalPriceSpan.textContent = totalPrice.toFixed(2);
+    cartSidebar.style.right = '0';
+}
+
+
+
+    checkoutBtn.addEventListener('click', () => {
+        // Handle checkout process (redirect to checkout page, etc.)
+        console.log('Proceeding to checkout...');
+    });
+});
+
+
+    </script>
+    
+</body>
+
+<%- include("partials/footer.ejs") %>
+
+
+
+
+
+
+
+
+
+script = 
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const cartItemsList = document.getElementById('cart-items');
+    const totalPriceSpan = document.getElementById('total-price');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    let cart = [];
+
+    cartCloseBtn.addEventListener('click', () => {
+        cartSidebar.style.right = '-300px'; // Close the cart sidebar
+    });
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const itemId = button.getAttribute('data-id');
+            const itemName = button.getAttribute('data-name');
+            const itemPrice = parseFloat(button.getAttribute('data-price')); // Parse float from data-price
+            const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+            
+            const item = {
+                id: itemId,
+                name: itemName,
+                price: itemPrice,
+                quantity: itemQuantity
+            };
+
+            cart.push(item); // Push the item to the cart array
+
+            updateCartUI();
+        });
+    });
+
+    
+    function updateCartUI() {
+    cartItemsList.innerHTML = '';
+    let totalPrice = 0;
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        const itemName = `${item.name} x ${item.quantity}`;
+        const itemPrice = (item.price * item.quantity).toFixed(2);
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.classList.add('remove-item');
+        removeBtn.setAttribute('data-id', item.id);
+
+        removeBtn.addEventListener('click', () => {
+    const itemId = removeBtn.getAttribute('data-id');
+    // Find the index of the item in the cart array
+    const index = cart.findIndex(cartItem => cartItem.id === itemId);
+    if (index !== -1) {
+        // Remove the item from the cart array using splice
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+});
+
+        li.textContent = `${itemName} - $${itemPrice}`;
+        li.appendChild(removeBtn);
+        cartItemsList.appendChild(li);
+
+        totalPrice += parseFloat(itemPrice); // Accumulate the total price
+    });
+
+    totalPriceSpan.textContent = totalPrice.toFixed(2);
+    cartSidebar.style.right = '0';
+}
+
+
+
+
+
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <h2>Menu</h2>
+        <div class="menu-items">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>$<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                    <input type="number" min="1" value="1" class="quantity-input">
+                    <!-- Use data attributes to store item ID and price -->
+                    <button class="add-to-cart" data-id="<%= item.id %>" data-name="<%= item.name %>" data-price="<%= item.price %>">Add to Cart</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart">
+            <span class="cart-close-btn" id="cart-close-btn">&times;</span>
+            <h3>Cart</h3>
+            <ul class="cart-items" id="cart-items"></ul>
+            <p>Total: $<span id="total-price">0.00</span></p>
+            <button id="checkout-btn" onclick="handleCheckout()">Checkout</button>
+        </div>
+    </div>
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+
+
+function handleCheckout(stripe) {
+  // Create a token using the card Element
+  stripe.createToken(cardElement).then((result) => {
+    if (result.error) {
+      // Handle token creation error
+      console.error(result.error.message);
+    } else {
+      // Send the token and cart data to the server
+      fetch('/pay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cart, token: result.token })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // Handle successful payment
+          console.log('Payment successful');
+        } else {
+          // Handle payment failure
+          console.error('Payment failed');
+        }
+      });
+    }
+  });
+}
+
+
+
+
+
+ 
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const elements = stripe.elements();
+  const cardElement = elements.create('card');
+  cardElement.mount('#card-element');
+
+  fetch('/stripe-key')
+    .then((response) => response.json())
+    .then((data) => {
+      const stripe = Stripe(data.stripeKey);
+      checkoutBtn.addEventListener('click', () => {
+        handleCheckout(stripe); // Pass the stripe object
+        console.log('Proceeding to checkout...');
+      });
+    });
+});
+
+
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const cartItemsList = document.getElementById('cart-items');
+    const totalPriceSpan = document.getElementById('total-price');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    let cart = [];
+
+    cartCloseBtn.addEventListener('click', () => {
+        cartSidebar.style.right = '-300px'; // Close the cart sidebar
+    });
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const itemId = button.getAttribute('data-id');
+            const itemName = button.getAttribute('data-name');
+            const itemPrice = parseFloat(button.getAttribute('data-price')); // Parse float from data-price
+            const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+            
+            const item = {
+                id: itemId,
+                name: itemName,
+                price: itemPrice,
+                quantity: itemQuantity
+            };
+
+            cart.push(item); // Push the item to the cart array
+
+            updateCartUI();
+        });
+    });
+
+    
+    function updateCartUI() {
+    cartItemsList.innerHTML = '';
+    let totalPrice = 0;
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        const itemName = `${item.name} x ${item.quantity}`;
+        const itemPrice = (item.price * item.quantity).toFixed(2);
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.classList.add('remove-item');
+        removeBtn.setAttribute('data-id', item.id);
+
+        removeBtn.addEventListener('click', () => {
+    const itemId = removeBtn.getAttribute('data-id');
+    // Find the index of the item in the cart array
+    const index = cart.findIndex(cartItem => cartItem.id === itemId);
+    if (index !== -1) {
+        // Remove the item from the cart array using splice
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+});
+
+        li.textContent = `${itemName} - $${itemPrice}`;
+        li.appendChild(removeBtn);
+        cartItemsList.appendChild(li);
+
+        totalPrice += parseFloat(itemPrice); // Accumulate the total price
+    });
+
+    totalPriceSpan.textContent = totalPrice.toFixed(2);
+    cartSidebar.style.right = '0';
+}
+
+    // Your existing code here...
+  
+
+
+
+
+
+// Checkout --
+ // Set your Stripe publishable key
+
+
+
+// payment --
+
+    </script>
+    
+</body>
+
+<%- include("partials/footer.ejs") %>
+
+
+
+
+
+
+
+
+
+ const employee_id = req.body.employee_id;
+  const loginPassword = req.body.password;
+
+
+
+
+  app.post("/LOGIN_emp", async (req, res) => {
+  const employee_id = req.body.employee_id;
+  const loginPassword = req.body.password;
+
+});
+
+app.post("/LOGIN_emp", passport.authenticate("local", {
+  successRedirect: "/employee",
+  failureRedirect: "/",
+}));
+
+
+
+passport.use(new Strategy(async function verify(employee_id, password , cb){
+  console.log(employee_id);
+  try {
+    const result = await db.query("SELECT * FROM employees WHERE employee_id = $1", [employee_id]);
+    if (result.rows.length > 0) {
+      const employee = result.rows[0];
+      const storedHashedPassword = employee.password;
+      // verifying the password
+      bcrypt.compare(password, storedHashedPassword, (err, result) => {
+        console.log(storedHashedPassword)
+        if (err) {
+          return cb(err)
+        } else {
+          if (result) {
+            return cb(null , employee);
+          } else {
+            return cb(null, false);
+          }
+        }
+      });
+    } else {
+      return cb("User not found");
+    }
+  } catch (err) {
+   return cb(err);
+  }
+}));
+
+
+
+
+
+passport.use(new Strategy(async (employee_id, password, done) => {
+  try {
+    console.log('Employee ID:', employee_id);
+    
+    const result = await db.query("SELECT * FROM employees WHERE employee_id = $1", [employee_id]);
+    console.log('Database Result:', result.rows);
+    
+    if (result.rows.length === 0) {
+      console.log('Employee not found');
+      return done(null, false, { message: 'Employee not found' });
+    }
+
+    const employee = result.rows[0];
+    const storedHashedPassword = employee.password;
+
+    bcrypt.compare(password, storedHashedPassword, (err, isMatch) => {
+      if (err) {
+        console.error("Error comparing passwords:", err);
+        return done(err);
+      }
+      if (!isMatch) {
+        console.log('Incorrect Password');
+        return done(null, false, { message: 'Incorrect Password' });
+      }
+      
+      console.log('Authentication successful');
+      return done(null, employee);
+    });
+  } catch (err) {
+    console.error('Database query error:', err);
+    return done(err);
+  }
+})
+);
+
+
+
+pp.get("/employee" , (req,res) => {
+
+ if (req.isAuthenticated()){
+  res.render("emp.ejs")
+ } else {
+  res.redirect("/Login")
+ }
+});
+
+
+
+
+<main class="main-content" id="emp-dashb">
+        <h2>Welcome, <%= f_name %>  <%= l_name %></h2>
+        <div class="employee-info">
+            <p><strong>Employee ID:</strong> <%=  employee_id %></p>
+            <p><strong>Position:</strong> <%= profession %></p>
+            <p><strong>Shift:</strong> Morning</p>
+            <p><strong>Email:</strong> <%= email  %> </p>
+            <p><strong>Phone:</strong> <%= m_number  %> </p>
+        </div>
+    </main>
+
+
+
+    #eceb98
+    #a5e2d0
+
+
+    <div class="col">
+                  <input type="time" id="time" name="time" required  class="form-control" placeholder="Number of customers" >
+                </div>
+
+
+
+
+
+
+
+                  document.addEventListener('DOMContentLoaded', () => {
+            // Fetch the Stripe publishable key from the server
+            fetch('/stripe-key')
+                .then(response => response.json())
+                .then(data => {
+                    const stripeKey = data.stripeKey;
+
+                    // Initialize Stripe globally with the fetched publishable key
+                    const stripe = Stripe(stripeKey);
+
+                    // Initialize Stripe Elements
+                    const elements = stripe.elements();
+
+                    // Create a card Element and mount it to the DOM element with ID 'card-element'
+                    const cardElement = elements.create('card');
+                    cardElement.mount('#card-element');
+
+                    // Define handleCheckout globally
+                    function handleCheckout() {
+                        // Create a token using the card Element
+                        stripe.createToken(cardElement).then((result) => {
+                            if (result.error) {
+                                // Handle token creation error
+                                console.error(result.error.message);
+                            } else {
+                                // Send the token and cart data to the server
+                                const cart = []; // Assuming you have cart items here
+                                fetch('/pay', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ cart, token: result.token })
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Handle successful payment
+                                        console.log('Payment successful');
+                                    } else {
+                                        // Handle payment failure
+                                        console.error('Payment failed');
+                                    }
+                                });
+                            }
+                        });
+                    }
+/////
+
+
+
+
+
+   })
+                .catch(error => {
+                    console.error('Error fetching Stripe key:', error);
+                });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ///////
+
+
+
+
+
+
+
+
+
+
+
+
+        async function saveOrder(cart, userId, totalAmount) {
+  try {
+    const res = await db.query(
+      'INSERT INTO orders (user_id, total_amount, order_status) VALUES ($1, $2, $3) RETURNING *',
+      [userId, totalAmount, 'pending']
+    );
+
+    const order = res.rows[0];
+
+    for (const item of cart) {
+      await db.query(
+        'INSERT INTO order_items (order_id, menu_item_id, quantity, price) VALUES ($1, $2, $3, $4)',
+        [order.id, item.id, item.quantity, item.price]
+      );
+    }
+
+    return order;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+// Update the /pay route to save the order after the payment is successful
+
+
+// Update the /pay route to save the order after the payment is successful
+app.post('/pay', async (req, res) => {
+  const { cart, token } = req.body;
+
+  try {
+    // Create a charge using the Stripe API
+    const charge = await stripe.charges.create({
+      amount: calculateTotalAmount(cart),
+      currency: 'inr',
+      source: token, // Use the entire token object instead of token.id
+      description: 'Restaurant Order Payment',
+    });
+
+    // Save the order to the database
+    const userId = 1; // Replace this with the actual user ID from the session or authentication
+    const order = await saveOrder(cart, userId, calculateTotalAmount(cart) / 100);
+
+    // Handle successful payment (e.g., redirect to the order confirmation page)
+    //...
+
+    res.send({ success: true, order });
+  } catch (error) {
+    // Handle payment failure (e.g., show an error message to the user)
+    console.error('Payment failed:', error.message);
+    res.status(500).send({ success: false, error: 'Payment failed' });
+  }
+});
+
+function calculateTotalAmount(cart) {
+  return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+}
+
+app.get('/stripe-key', (req, res) => {
+  res.json({ stripeKey: process.env.STRIPE_PUBLISHABLE_KEY });
+});
+
+///
+
+
+<form id="checkout-form" action="/checkout" method="POST">
+    <!-- Hidden input fields for items and total price -->
+    <input type="hidden" name="items" id="items-input" value="">
+    <input type="hidden" name="totalPrice" id="total-price-input" value="">
+    <button type="submit">Checkout</button>
+</form>
+
+///
+
+<button id="checkout-btn">
+                <a href="/checkout" id="checkout-link">Checkout</a>
+            </button>
+
+
+            
+            //
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+import express from "express";
+import bodyParser from "body-parser";
+import pg from "pg";
+import bcrypt from "bcrypt";
+import nodemailer from "nodemailer";
+import env from  "dotenv";
+import MenuItem from './models/menuItem.js';
+import session from "express-session";
+import passport from "passport";
+import Stripe from 'stripe';
+import { Strategy } from "passport-local";
+
+
+
+
+const app = express();
+const port = 3000;
+const saltRounds = 15;
+env.config();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+
+app.use(session({
+  secret : "SESSIONSECRET",
+  resave : false,
+  saveUninitialized : true,
+})
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+const db = new pg.Client({
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password:process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+});
+
+db.connect();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+
+
+app.get("/", (req, res) => {
+  res.render("home.ejs");
+});
+
+app.get("/user-h", (req, res) => {
+  res.render("user-h.ejs");
+});
+
+app.get("/checkout", (req, res) => {
+  res.render("checkout.ejs");
+});
+
+app.get("/Services", (req, res) => {
+  res.render("services.ejs");
+});
+
+app.get("/Contact", (req, res) => {
+  res.render("contact.ejs");
+});
+
+
+//Normal Menu
+app.get("/Menu", async (req, res) => {
+  try {
+    // Query all menu items from the database including the 'type' column
+    const menuItems = await MenuItem.findAll({ attributes: ['name', 'price', 'type'] });
+    menuItems.forEach(item => {
+      item.price = parseFloat(item.price); // Convert price to a float
+    });
+
+    
+
+    // Render the menu page and pass the menu items data to the template
+    res.render("menu-h.ejs", { menuItems });
+  } catch (err) {
+    console.error('Error fetching menu items:', err);
+    res.status(500).send('Error fetching menu items');
+  }
+});
+
+app.get("/Login", (req, res) => {
+  res.render("login.ejs");
+});
+
+app.get("/Sign-up", (req, res) => {
+  res.render("sign-up.ejs");
+});
+
+app.get("/User", (req, res) => {
+  res.render("usr_lg.ejs");
+});
+
+
+app.get("/Employee_prof", (req,res) => {
+  res.render("emp.ejs");
+});
+
+app.get("/Fail", (req,res) => {
+  res.render("failure.ejs");
+});
+
+
+
+app.get("/employee" , (req,res) => {
+
+ if (req.isAuthenticated()){
+  res.render("emp.ejs", { user: req.user });
+ } else {
+  res.redirect("/Fail")
+ }
+});
+
+
+
+// Menu for users 
+app.get("/Menu-B", async (req, res) => {
+  try {
+    // Query all menu items from the database including the 'type' column
+    const menuItems = await MenuItem.findAll({ attributes: ['name', 'price', 'type'] });
+    menuItems.forEach(item => {
+      item.price = parseFloat(item.price); // Convert price to a float
+    });
+
+    
+
+    // Render the menu page and pass the menu items data to the template
+    res.render("menu.ejs", { menuItems });
+  } catch (err) {
+    console.error('Error fetching menu items:', err);
+    res.status(500).send('Error fetching menu items');
+  }
+});
+
+
+
+
+
+
+// Displaying Reservation 
+
+app.get("/Res", async (req, res) => { 
+  try {
+    const currentDate = new Date().toISOString().slice(0, 10);
+    console.log("Current date :" + currentDate);
+    const result = await db.query("SELECT * FROM reservations WHERE date = $1 ORDER BY date DESC",[currentDate]);
+     const resv = result.rows;
+     
+
+     console.log(resv);
+
+    res.render("emp_reservation.ejs", {
+      listItems: resv,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+// * Displaying Contact form
+
+app.get("/Contact-E", async (req, res) => { 
+  try {
+    const currentDate = new Date().toISOString().slice(0, 10);
+    console.log("Current date :" + currentDate);
+    const result = await db.query("SELECT * FROM contact WHERE date = $1 ORDER BY date DESC",[currentDate]);
+     const contact = result.rows;
+     
+
+     console.log(contact);
+
+    res.render("emp_contact.ejs", {
+      listItems: contact,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// * Reservation
+
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+    port: 465,  
+    secure: true,
+  auth: {
+      user:process.env.NODEMAILER_USERNAME,
+      pass:process.env.NODEMAILER_PASSWORD,
+  },
+});
+
+app.use((req, res, next) => {
+  res.locals.currentDate = new Date().toLocaleDateString();
+  next();
+});
+
+
+
+app.post('/reserve', async (req, res) => {
+  const { name, email, phone, date, time, count } = req.body;
+
+  // Check available seats for the specified date and time
+  const seatsQuery = `
+  SELECT SUM(count) AS total_seats
+FROM reservations
+WHERE date = $1 AND time = $2
+GROUP BY date;
+  `;
+  var availableSeatsValues = [date,time];
+  
+  try {
+      const availableSeatsResult = await db.query(seatsQuery, availableSeatsValues);
+      const seatsString = availableSeatsResult.rows[0]?.total_seats || '0';
+      const seats = parseInt(seatsString, 10);
+      console.log(seats);
+
+      const exceed_limit = seats + count;
+      console.log(exceed_limit);
+
+      if (exceed_limit > 50) {
+        res.status(400).send('Not enough available seats for your reservation.');
+    } else {
+        // Perform the reservation and update available seats
+        const insertQuery = `
+            INSERT INTO reservations (name, email, phone, date, time, count, reservation_timestamp)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `;
+        const insertValues = [name, email, phone, date, time, count, new Date()];
+    
+        await db.query(insertQuery, insertValues);
+    
+        const mailOptions = {
+            from: 'your_email_address',
+            to: email,
+            subject: 'Reservation Confirmation',
+            text: `Dear ${name},\n\nYour reservation for ${count} people on ${date} at ${time} has been confirmed.\n\nThank you for choosing us!\n\nBest regards,\nBuena Comida Team`,
+        };
+    
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                res.send("Email Error");
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
+    
+        res.send('Reservation submitted successfully.');
+    }
+    
+  } catch (err) {
+      console.error('Error executing queries', err);
+      res.status(500).send('Error submitting reservation.');
+  }
+});
+
+
+
+//* Contact Us Form
+app.post('/Contact', async (req, res) => {
+  const { name, email, subject, message } = req.body;
+  const currentDate = new Date().toISOString().slice(0, 10);
+  console.log("cont current date:" + currentDate);
+
+ 
+  const insertQuery = `
+      INSERT INTO contact (name, email, subject, message, date)
+      VALUES ($1, $2, $3, $4, $5)
+  `;
+  const insertValues = [name, email, subject, message, currentDate];
+
+  try {
+      await db.query(insertQuery, insertValues);
+      res.send('Form submitted successfully!');
+  } catch (error) {
+      console.error('Error inserting data:', error);
+      res.status(500).send('An error occurred while processing your request.');
+  }
+});
+
+
+
+
+
+
+
+
+//* employee registering
+app.post("/submit_signup", async (req, res) => {
+  const employee_id = req.body.employee_id;
+  const password = req.body.password;
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const profession = req.body.profession;
+  const email = req.body.email;
+  const m_number = req.body.m_number;
+  const address = req.body.address;
+
+  try {
+    const checkResult = await db.query("SELECT * FROM employees WHERE employee_id = $1", [employee_id]);
+
+    if (checkResult.rows.length > 0) {
+      res.send("Email already exists. Try logging in.");
+    } else {
+      // hashing the password and saving it in the database
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          console.error("Error hashing password:", err);
+        } else {
+          console.log("Hashed Password:", hash);
+          await db.query(
+            "INSERT INTO employees (employee_id, password,first_name,last_name,profession,email,m_number,address) VALUES ($1, $2,$3,$4,$5,$6,$7,$8)",
+            [employee_id, hash, first_name, last_name, profession, email, m_number, address]
+          );
+          res.render("emp.ejs", {
+            employee_id: employee_id,
+            f_name: first_name,
+            l_name: last_name,
+            profession: profession,
+            email: email,
+            m_number: m_number
+          });
+        }
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+
+
+
+
+
+//* employee login
+app.post("/LOGIN_emp", passport.authenticate("local",{
+  successRedirect:"/employee",
+  failureRedirect: "/Fail" ,
+}));
+
+
+//user register
+app.post("/register", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+
+    if (checkResult.rows.length > 0) {
+      res.send("Email already exists. Try logging in.");
+    } else {
+      // hashing the password and saving it in the database
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          console.error("Error hashing password:", err);
+        } else {
+          console.log("Hashed Password:", hash);
+          await db.query(
+            "INSERT INTO users (password , email , username) VALUES ($1, $2,$3)",
+            [hash,email,username]
+          );
+          res.render("user-h.ejs");
+        }
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+
+
+//user login
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+    if (result.rows.length > 0) {
+      const user = result.rows[0];
+      const storedHashedPassword = user.password;
+      const user_id = user.user_id;
+      const username = user.username;
+      const user_email = user.email;
+      // verifying the password
+      bcrypt.compare(password, storedHashedPassword, (err, result) => {
+        if (err) {
+          console.error("Error comparing passwords:", err);
+        } else {
+          if  (result) {
+            
+            res.render("user-h.ejs",{
+              user_id: user_id,
+              username: username,
+              user_email: user_email
+            });
+          } else {
+            res.send("Incorrect Password");
+          }
+        }
+      });
+    } else {
+      res.send("User not found");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+});
+
+
+
+// session and passport --
+
+
+passport.use(new Strategy(async function verify(username, password, done) {
+  try {
+    
+    
+    const result = await db.query("SELECT * FROM employees WHERE employee_id = $1", [username]);
+    
+    
+    if (result.rows.length === 0) {
+      console.log('Employee not found');
+      return done(null, false, { message: 'Employee not found' });
+    }
+
+    const employee = result.rows[0];
+    console.log(employee);
+    const storedHashedPassword = employee.password;
+    console.log(storedHashedPassword);
+
+    bcrypt.compare(password, storedHashedPassword, (err, isMatch) => {
+      if (err) {
+        console.error("Error comparing passwords:", err);
+        return done(err);
+      }
+      if (!isMatch) {
+        console.log('Incorrect Password');
+        return done(null, false, { message: 'Incorrect Password' });
+      }
+      
+      console.log('Authentication successful');
+      return done(null, employee);
+    });
+  } catch (err) {
+    console.error('Authentication error:', err);
+    return done(err);
+  }
+}));
+
+
+passport.serializeUser((employee , cb) =>{
+  cb(null, employee);
+
+});
+
+passport.deserializeUser((employee , cb) =>{
+  cb(null, employee);
+
+});
+
+
+
+
+
+// payment ---
+
+        //creating order -
+
+app.post("/orders", async (req, res) => {
+  
+  const totalprice = req.body.totalPrice;
+  const items = req.body.items;
+
+
+         
+        
+ });     
+
+
+
+
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
+
+///////
+
+
+
+
+  <script>
+        document.addEventListener('DOMContentLoaded', () => {
+                     // Your other JavaScript code here...
+                     const cartSidebar = document.getElementById('cart-sidebar');
+                     const cartCloseBtn = document.getElementById('cart-close-btn');
+                     const addToCartButtons = document.querySelectorAll('.add-to-cart');
+                     const cartItemsList = document.getElementById('cart-items');
+                     const totalPriceSpan = document.getElementById('total-price');
+                     const checkoutBtn = document.getElementById('checkout-btn');
+                     let cart = [];
+ 
+                     cartCloseBtn.addEventListener('click', () => {
+                         cartSidebar.style.right = '-300px'; // Close the cart sidebar
+                     });
+ 
+                     addToCartButtons.forEach(button => {
+                         button.addEventListener('click', () => {
+                             const itemId = button.getAttribute('data-id');
+                             const itemName = button.getAttribute('data-name');
+                             const itemPrice = parseFloat(button.getAttribute('data-price')); // Parse float from data-price
+                             const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+                             
+                             const item = {
+                                 id: itemId,
+                                 name: itemName,
+                                 price: itemPrice,
+                                 quantity: itemQuantity
+                             };
+ 
+                             cart.push(item); // Push the item to the cart array
+ 
+                             updateCartUI();
+                         });
+                     });
+ 
+                     function updateCartUI() {
+                         cartItemsList.innerHTML = '';
+                         let totalPrice = 0;
+ 
+                         cart.forEach(item => {
+                             const li = document.createElement('li');
+                             const itemName = `${item.name} x ${item.quantity}`;
+                             const itemPrice = (item.price * item.quantity).toFixed(2);
+                             const removeBtn = document.createElement('button');
+                             removeBtn.textContent = 'Remove';
+                             removeBtn.classList.add('remove-item');
+                             removeBtn.setAttribute('data-id', item.id);
+ 
+                             removeBtn.addEventListener('click', () => {
+                                 const itemId = removeBtn.getAttribute('data-id');
+                                 // Find the index of the item in the cart array
+                                 const index = cart.findIndex(cartItem => cartItem.id === itemId);
+                                 if (index !== -1) {
+                                     // Remove the item from the cart array using splice
+                                     cart.splice(index, 1);
+                                     updateCartUI();
+                                 }
+                             });
+ 
+                             li.textContent = `${itemName} - $${itemPrice}`;
+                             li.appendChild(removeBtn);
+                             cartItemsList.appendChild(li);
+ 
+                             totalPrice += parseFloat(itemPrice); // Accumulate the total price
+                         });
+ 
+                         totalPriceSpan.textContent = totalPrice.toFixed(2);
+                         cartSidebar.style.right = '0';
+                     }
+ 
+                     checkoutBtn.addEventListener('click', () => {
+                         handleCheckout();
+                         console.log('Proceeding to checkout...');
+                     });
+ 
+ 
+ 
+                     // checkout handle
+                    
+     
+         const checkoutLink = document.getElementById('checkout-link');
+         checkoutLink.addEventListener('click', () => {
+             const cartData = JSON.stringify(cart);
+             const checkoutUrl = `/checkout?cart=${encodeURIComponent(cartData)}`;
+             window.location.href = checkoutUrl;
+         });
+ 
+ 
+ 
+ 
+ 
+         // checkout form 
+ 
+ 
+         const checkoutForm = document.getElementById('checkout-form');
+         const itemsInput = document.getElementById('items-input');
+         const totalPriceInput = document.getElementById('total-price-input');
+ 
+         checkoutForm.addEventListener('submit', (event) => {
+             event.preventDefault(); // Prevent the default form submission
+ 
+             // Collect item names
+             const itemNames = [];
+             cart.forEach(item => {
+                 itemNames.push(item.name);
+             });
+ 
+             // Set item names in the hidden input field
+             itemsInput.value = itemNames.join(', ');
+ 
+             // Calculate total price
+             let totalPrice = 0;
+             cart.forEach(item => {
+                 totalPrice += item.price * item.quantity;
+             });
+ 
+             // Set total price in the hidden input field
+             totalPriceInput.value = totalPrice.toFixed(2);
+ 
+             // Submit the form
+             checkoutForm.submit();
+         });
+ 
+     });
+ 
+ </script>
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <% if (user) { %>
+            <h2>Welcome, <%= user.username %>!</h2>
+          <% } else { %>
+            <h2>Menu </h2>
+          <% } %>
+          
+        <div class="menu-items">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>₹<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                    <input type="number" min="1" value="1" class="quantity-input">
+                    <!-- Use data attributes to store item ID and price -->
+                    <button class="add-to-cart" data-id="<%= item.id %>" data-name="<%= item.name %>" data-price="<%= item.price %>">Add to Cart</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart">
+            <span class="cart-close-btn" id="cart-close-btn">&times;</span>
+            <h3>Cart</h3>
+            <ul class="cart-items" id="cart-items"></ul>
+            <p>₹Total: <span id="total-price">0.00</span></p>
+            <div id="card-element"></div> <!-- Add this element for the card input -->
+            <form id="checkout-form" action="/orders" method="POST">
+                <!-- Hidden input fields for items, total price, and user ID -->
+                <input type="hidden" name="items" id="items-input" value="">
+                <input type="hidden" name="totalPrice" id="total-price-input" value="">
+                <input type="hidden" name="userId" id="user-id-input" value="<%= user.id %>">
+                <!-- Use the button to submit the form -->
+                <button id="checkout-btn" type="button">Checkout</button>
+            </form>
+            
+            </form>
+        </div>
+    </div>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartCloseBtn = document.getElementById('cart-close-btn');
+            const checkoutForm = document.getElementById('checkout-form');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const itemsInput = document.getElementById('items-input');
+            const totalPriceInput = document.getElementById('total-price-input');
+            const totalPriceSpan = document.getElementById('total-price');
+            const cartItemsList = document.getElementById('cart-items');
+            let cart = [];
+    
+            // Close cart sidebar
+            cartCloseBtn.addEventListener('click', () => {
+                cartSidebar.style.right = '-300px';
+            });
+    
+            // Add to cart button event listener
+            function handleAddToCart(button) {
+                const itemId = button.getAttribute('data-id');
+                const itemName = button.getAttribute('data-name');
+                const itemPrice = parseFloat(button.getAttribute('data-price'));
+                const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+                
+                const item = {
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: itemQuantity
+                };
+    
+                cart.push(item);
+                updateCartUI();
+            }
+    
+            function updateCartUI() {
+                cartItemsList.innerHTML = '';
+                let totalPrice = 0;
+    
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    const itemName = `${item.name} x ${item.quantity}`;
+                    const itemPrice = (item.price * item.quantity).toFixed(2);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.classList.add('remove-item');
+                    removeBtn.setAttribute('data-id', item.id);
+    
+                    removeBtn.addEventListener('click', () => {
+                        const itemId = removeBtn.getAttribute('data-id');
+                        const index = cart.findIndex(cartItem => cartItem.id === itemId);
+                        if (index !== -1) {
+                            cart.splice(index, 1);
+                            updateCartUI();
+                        }
+                    });
+    
+                    li.textContent = `${itemName} - $${itemPrice}`;
+                    li.appendChild(removeBtn);
+                    cartItemsList.appendChild(li);
+    
+                    totalPrice += parseFloat(itemPrice);
+                });
+    
+                totalPriceSpan.textContent = totalPrice.toFixed(2);
+                cartSidebar.style.right = '0';
+            }
+    
+            // Add to cart buttons event listener
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    handleAddToCart(button);
+                });
+            });
+    
+            // Checkout button event listener
+            checkoutBtn.addEventListener('click', () => {
+                // Collect item names and total price
+                const itemNames = cart.map(item => item.name).join(', ');
+                const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    
+                itemsInput.value = itemNames;
+                totalPriceInput.value = totalPrice.toFixed(2);
+
+               
+    
+                // Submit the form
+                checkoutForm.submit();
+            });
+    
+            // Handle form submission event
+            checkoutForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent the default form submission
+    
+                // Redirect to /checkout page after setting form values
+                window.location.href = '/checkout';
+            });
+        });
+    </script>
+    
+</body>
+
+<%- include("partials/footer.ejs") %>
+
+
+
+
+/////////////////////////////////////////////////////////////////
+
+
+
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <% if (user) { %>
+            <h2>Welcome, <%= user.username %> <%= user.user_id %>!</h2>
+        <% } else { %>
+            <h2>Menu</h2>
+        <% } %>
+          
+        <div class="menu-items">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>₹<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                    <input type="number" min="1" value="1" class="quantity-input">
+                    <!-- Use data attributes to store item ID and price -->
+                    <button class="add-to-cart" data-id="<%= item.id %>" data-name="<%= item.name %>" data-price="<%= item.price %>">Add to Cart</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart">
+            <span class="cart-close-btn" id="cart-close-btn">&times;</span>
+            <h3>Cart</h3>
+            <ul class="cart-items" id="cart-items"></ul>
+            <p>₹Total: <span id="total-price">0.00</span></p>
+            <div id="card-element"></div> <!-- Add this element for the card input -->
+            <form id="checkout-form" action="/orders" method="POST">
+                <!-- Hidden input fields for items, total price, and user ID -->
+                <input type="hidden" name="items" id="items-input" value="">
+                <input type="hidden" name="totalPrice" id="total-price-input" value="">
+                <input type="hidden" name="userId" id="user-id-input" value="<%= user.user_id %>">
+                <!-- Use the button to submit the form -->
+                <button id="checkout-btn" type="button">Checkout</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartCloseBtn = document.getElementById('cart-close-btn');
+            const checkoutForm = document.getElementById('checkout-form');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const itemsInput = document.getElementById('items-input');
+            const totalPriceInput = document.getElementById('total-price-input');
+            const totalPriceSpan = document.getElementById('total-price');
+            const cartItemsList = document.getElementById('cart-items');
+            let cart = [];
+
+            // Close cart sidebar
+            cartCloseBtn.addEventListener('click', () => {
+                cartSidebar.style.right = '-300px';
+            });
+
+            // Add to cart button event listener
+            function handleAddToCart(button) {
+                const itemId = button.getAttribute('data-id');
+                const itemName = button.getAttribute('data-name');
+                const itemPrice = parseFloat(button.getAttribute('data-price'));
+                const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+                
+                const item = {
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: itemQuantity
+                };
+
+                cart.push(item);
+                updateCartUI();
+            }
+
+            function updateCartUI() {
+                cartItemsList.innerHTML = '';
+                let totalPrice = 0;
+
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    const itemName = `${item.name} x ${item.quantity}`;
+                    const itemPrice = (item.price * item.quantity).toFixed(2);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.classList.add('remove-item');
+                    removeBtn.setAttribute('data-id', item.id);
+
+                    removeBtn.addEventListener('click', () => {
+                        const itemId = removeBtn.getAttribute('data-id');
+                        const index = cart.findIndex(cartItem => cartItem.id === itemId);
+                        if (index !== -1) {
+                            cart.splice(index, 1);
+                            updateCartUI();
+                        }
+                    });
+
+                    li.textContent = `${itemName} - $${itemPrice}`;
+                    li.appendChild(removeBtn);
+                    cartItemsList.appendChild(li);
+
+                    totalPrice += parseFloat(itemPrice);
+                });
+
+                totalPriceSpan.textContent = totalPrice.toFixed(2);
+                cartSidebar.style.right = '0';
+            }
+
+            // Add to cart buttons event listener
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    handleAddToCart(button);
+                });
+            });
+
+            // Checkout button event listener
+            checkoutBtn.addEventListener('click',async () => {
+                console.log('button got clicked !');
+                // Collect item names and total price
+                const itemNames = cart.map(item => item.name).join(', ');
+                const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+                itemsInput.value = itemNames;
+                totalPriceInput.value = totalPrice.toFixed(2);
+
+                const cartData = {
+        items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        })),
+        totalPrice: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+    };
+
+
+                // Submit the form
+                checkoutForm.submit();
+
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                const encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+                window.location.href = '/checkout';
+            });
+
+            // Handle form submission event
+            checkoutForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Redirect to /checkout page after setting form values
+               
+            });
+        });
+    </script>
+
+</body>
+
+<%- include("partials/footer.ejs") %>
+//////////////////////////////////*********************************************************************************************************8
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <% if (user) { %>
+            <h2>Welcome, <%= user.username %> <%= user.user_id %>!</h2>
+        <% } else { %>
+            <h2>Menu</h2>
+        <% } %>
+          
+        <div class="menu-items">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>₹<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                    <input type="number" min="1" value="1" class="quantity-input">
+                    <!-- Use data attributes to store item ID and price -->
+                    <button class="add-to-cart" data-id="<%= item.id %>" data-name="<%= item.name %>" data-price="<%= item.price %>">Add to Cart</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart">
+            <span class="cart-close-btn" id="cart-close-btn">&times;</span>
+            <h3>Cart</h3>
+            <ul class="cart-items" id="cart-items"></ul>
+            <p>₹Total: <span id="total-price">0.00</span></p>
+            <div id="card-element"></div> <!-- Add this element for the card input -->
+            <form id="checkout-form" action="/orders" method="POST">
+                <!-- Hidden input fields for items, total price, and user ID -->
+                <input type="hidden" name="items" id="items-input" value="">
+                <input type="hidden" name="totalPrice" id="total-price-input" value="">
+                <input type="hidden" name="userId" id="user-id-input" value="<%= user.user_id %>">
+                <!-- Use the button to submit the form -->
+                <button id="checkout-btn" type="button">Checkout</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartCloseBtn = document.getElementById('cart-close-btn');
+            const checkoutForm = document.getElementById('checkout-form');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const itemsInput = document.getElementById('items-input');
+            const totalPriceInput = document.getElementById('total-price-input');
+            const totalPriceSpan = document.getElementById('total-price');
+            const cartItemsList = document.getElementById('cart-items');
+            let cart = [];
+
+            // Close cart sidebar
+            cartCloseBtn.addEventListener('click', () => {
+                cartSidebar.style.right = '-300px';
+            });
+
+            // Add to cart button event listener
+            function handleAddToCart(button) {
+                const itemId = button.getAttribute('data-id');
+                const itemName = button.getAttribute('data-name');
+                const itemPrice = parseFloat(button.getAttribute('data-price'));
+                const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+                
+                const item = {
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: itemQuantity
+                };
+
+                cart.push(item);
+                updateCartUI();
+            }
+
+            function updateCartUI() {
+                cartItemsList.innerHTML = '';
+                let totalPrice = 0;
+
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    const itemName = `${item.name} x ${item.quantity}`;
+                    const itemPrice = (item.price * item.quantity).toFixed(2);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.classList.add('remove-item');
+                    removeBtn.setAttribute('data-id', item.id);
+
+                    removeBtn.addEventListener('click', () => {
+                        const itemId = removeBtn.getAttribute('data-id');
+                        const index = cart.findIndex(cartItem => cartItem.id === itemId);
+                        if (index !== -1) {
+                            cart.splice(index, 1);
+                            updateCartUI();
+                        }
+                    });
+
+                    li.textContent = `${itemName} - $${itemPrice}`;
+                    li.appendChild(removeBtn);
+                    cartItemsList.appendChild(li);
+
+                    totalPrice += parseFloat(itemPrice);
+                });
+
+                totalPriceSpan.textContent = totalPrice.toFixed(2);
+                cartSidebar.style.right = '0';
+            }
+
+            // Add to cart buttons event listener
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    handleAddToCart(button);
+                });
+            });
+
+    // Checkout button event listener
+    checkoutBtn.addEventListener('click', async () => {
+    
+    // Collect item names and total price
+    const itemNames = cart.map(item => item.name).join(', ');
+    const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+    itemsInput.value = itemNames;
+    totalPriceInput.value = totalPrice.toFixed(2);
+
+    const cartData = {
+        items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        })),
+        totalPrice: totalPrice
+    };
+
+    const encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+    window.location.href = `/checkout?cart=${encodedCartData}`;
+
+    // Prevent the default form submission
+    event.preventDefault();
+    
+    // Submit the form after redirecting
+    setTimeout(() => {
+        checkoutForm.submit();
+    }, 100);
+});
+
+            // Handle form submission event
+            checkoutForm.addEventListener('submit', (event) => {
+                console.log('Form submitted');
+                event.preventDefault(); // Prevent the default form submission
+
+                // Redirect to /checkout page after setting form values
+               
+            });
+        });
+    </script>
+
+</body>
+
+<%- include("partials/footer.ejs") %>
+////
+
+
+
+amount:totalPrice.toFixed(2)
+
+
+
+
+/////////////////////////
+
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Retrieve cart data from session storage
+            const cartDataJson = sessionStorage.getItem('cartData');
+            if (cartDataJson) {
+                try {
+                    const cartData = JSON.parse(cartDataJson);
+                    console.log('Retrieved cart data:', cartData);
+
+                    // Process and display cart items and total amount
+                    const orderItemsList = document.getElementById('order-items');
+                    const totalPriceSpan = document.getElementById('total-price');
+                    let totalPrice = 0;
+
+                    cartData.items.forEach(item => {
+                        const li = document.createElement('li');
+                        var itemName = `${item.name} x ${item.quantity}`;
+                        const itemPrice = (item.price * item.quantity).toFixed(2);
+                        li.textContent = `${itemName} - ₹${itemPrice}`;
+                        orderItemsList.appendChild(li);
+                        totalPrice += parseFloat(itemPrice);
+                         
+                    });
+
+                    totalPriceSpan.textContent = totalPrice.toFixed(2);
+                } catch (error) {
+                    console.error('Error parsing cart data:', error);
+                }
+            } else {
+                console.log('Cart data not found in session storage');
+            }
+        });
+    </script>
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <h2>Checkout</h2>
+        <div class="checkout-summary">
+            <h3>Order Summary</h3>
+            <ul class="order-items" id="order-items"></ul>
+            <p>Total: ₹<span id="total-price">0.00</span></p>
+        </div>
+        <form id="checkout-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" required></textarea>
+            <button type="submit">Place Order</button>
+        </form>
+    </main>
+    <form action="payment" method="POST">
+        <input type="hidden" name="amount" value="<%= parseInt(totalPriceSpan)*100 %>">
+        <input type="hidden" name="productName" value= <%= itemName %>>
+        <script
+            src="//checkout.stripe.com/v2/checkout.js"
+            class="stripe-button"
+            data-key="<%= key %>"
+            data-amount="<%= parseInt(totalPriceSpan)*100 %>"
+            data-currency="inr"
+            data-name="<%= itemName %>"
+            data-description=" <%= itemPrice %>"
+            data-locale="auto" >
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+            // Retrieve cart data from session storage
+            const cartDataJson = sessionStorage.getItem('cartData');
+            if (cartDataJson) {
+                try {
+                    const cartData = JSON.parse(cartDataJson);
+                    console.log('Retrieved cart data:', cartData);
+
+                    // Process and display cart items and total amount
+                    const orderItemsList = document.getElementById('order-items');
+                    const totalPriceSpan = document.getElementById('total-price');
+                    let totalPrice = 0;
+
+                    cartData.items.forEach(item => {
+                        const li = document.createElement('li');
+                        var itemName = `${item.name} x ${item.quantity}`;
+                        const itemPrice = (item.price * item.quantity).toFixed(2);
+                        li.textContent = `${itemName} - ₹${itemPrice}`;
+                        orderItemsList.appendChild(li);
+                        totalPrice += parseFloat(itemPrice);
+                         
+                    });
+
+                    totalPriceSpan.textContent = totalPrice.toFixed(2);
+                } catch (error) {
+                    console.error('Error parsing cart data:', error);
+                }
+            } else {
+                console.log('Cart data not found in session storage');
+            }
+        });
+
+
+            </script>
+        </form>
+
+
+   
+</body>
+
+<%- include("partials/footer.ejs") %>
+
+///////////////////////////////
+paymentController.failure

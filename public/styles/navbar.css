@@ -1,0 +1,40 @@
+.navbars {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  .navbars .logos a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  
+  .navbars .nav-linkss {
+    list-style-type: none;
+    display: flex;
+  }
+  
+  .navbars .nav-linkss li {
+    margin-right: 15px;
+  }
+  
+  .navbars .burgers {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .navbars .nav-linkss {
+      display: none;
+    }
+  
+    .navbars .burgers {
+      display: flex;
+    }
+  }
+  

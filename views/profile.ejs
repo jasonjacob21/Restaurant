@@ -1,0 +1,13 @@
+<!-- profile.html -->
+
+<%- include("Partials/header-u.ejs") %>
+
+    <div class="container">
+        <div class="profile-info">
+            <h1>User Profile</h1>
+            <p><strong>Username:</strong> <%= user.username %> </user></p>
+            <p><strong>ID:</strong> <%= user.user_id %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+        </div>
+    </div>
+    <%- include("Partials/footer.ejs") %>

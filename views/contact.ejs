@@ -1,0 +1,71 @@
+<%- include("Partials/header.ejs") %>
+
+<section class="Contact-us">
+    <div class="container text-light">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="display-4 text-uppercase text-center">CONTACT US</h1>
+                <p class="lead text-center">
+                    "Got a craving or a question? Drop us a line below and we'll serve up the answers!"
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50px" class="text-light" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
+                <h3>Location</h3>
+                <p>Bandra,Mumbai,India</p>
+                  <img src="/images/call.svg" alt="call" height="50px" class="text-light">
+                 <h3>Call Us</h3>
+                <p>+91 7654389762</p>
+                  <img src="/images/envelope.svg" alt="envelope" height="50px" class="text-light">
+                  <h3>Email</h3>
+                <p>buenacomidamumbai@gmail.com</p>
+            </div>
+            <div class="col-lg-8">
+              <div class="contactform">
+                <form action="/Contact" method="post">
+                <div class="row">
+                  <div class="col-lg-8">
+                    <span id="lblResponse" class="tab-content"></span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <input name="name" value="name" type="text" id="name" class="form-control my-2 " placeholder="Name">
+                  </div>
+                  <br>
+                  <div class="col-lg-6">
+                    <input name="email" value="email" type="text" id="email" class="form-control my-2" placeholder="Email" required>
+                  </div>
+                  <br>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <input name="subject" value="subject" type="text" id="subject" class="form-control my-2" placeholder="Subject" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                   <textarea name="message" value="message" id="message" cols="20" rows="10" cols="30" class="form-control my-2" placeholder="Message" required></textarea>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                   <button type="submit" name="submit" value="submit" id="submit" class="btn btn-lg btn-submit btn-outline-light mb-5"> Send Message</button>
+                  </div>
+                </div>
+              </form>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+
+
+
+
+<%- include("Partials/footer.ejs") %>

@@ -1,0 +1,89 @@
+<!-- checkout.ejs -->
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <h2>Checkout</h2>
+        <div class="checkout-summary">
+            <h3>Order Summary</h3>
+            <ul class="order-items" id="order-items"></ul>
+            <p>Total: ₹<span id="total-price">0.00</span></p>
+        </div>
+        <form id="checkout-form" action="payment" method="POST" >
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" required></textarea>
+            <button type="submit">Place Order</button>
+            
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartDataJson = sessionStorage.getItem('cartData');
+            if (cartDataJson) {
+                try {
+                    const cartData = JSON.parse(cartDataJson);
+                    console.log('Retrieved cart data:', cartData);
+
+                    const orderItemsList = document.getElementById('order-items');
+                    const totalPriceSpan = document.getElementById('total-price');
+                    let totalPrice = 0;
+
+                    cartData.items.forEach(item => {
+                        const li = document.createElement('li');
+                        const itemName = `${item.name} x ${item.quantity}`;
+                        const itemPrice = (item.price * item.quantity).toFixed(2);
+                        li.textContent = `${itemName} - ₹${itemPrice}`;
+                        orderItemsList.appendChild(li);
+                        totalPrice += parseFloat(itemPrice);
+                    });
+
+                    totalPriceSpan.textContent = totalPrice.toFixed(2);
+
+                    // Create hidden inputs for Stripe integration
+                    const amountInput = document.createElement('input');
+                    amountInput.type = 'hidden';
+                    amountInput.name = 'amount';
+                    amountInput.value = (parseInt(totalPriceSpan.textContent, 10) * 100);
+                    document.getElementById('checkout-form').appendChild(amountInput);
+
+                    const productNameInput = document.createElement('input');
+                    productNameInput.type = 'hidden';
+                    productNameInput.name = 'productName';
+                    productNameInput.value = itemName ; // Replace with actual product name
+                    document.getElementById('checkout-form').appendChild(productNameInput);
+
+                    // Load Stripe script
+                    const stripeScript = document.createElement('script');
+                    stripeScript.src = 'https://checkout.stripe.com/checkout.ejs';
+                    stripeScript.setAttribute('class', 'stripe-button');
+                    stripeScript.setAttribute('data-key', key);
+                    stripeScript.setAttribute('data-amount', amountInput.value);
+                    stripeScript.setAttribute('data-name',  productNameInput.value);
+                    stripeScript.setAttribute('data-description',  productNameInput.value);
+                    stripeScript.setAttribute('data-currency', 'INR');
+                    stripeScript.setAttribute('data-locale', 'auto');
+                    document.getElementById('checkout-form').appendChild(stripeScript);
+
+                    // Form submission event listener
+                    document.getElementById('checkout-form').addEventListener('submit', event => {
+                        event.preventDefault();
+                        // Handle form submission here
+                        // You can submit the form via AJAX or proceed with a traditional form submission
+                    });
+
+                } catch (error) {
+                    console.error('Error parsing cart data:', error);
+                }
+            } else {
+                console.log('Cart data not found in session storage');
+            }
+        });
+    </script>
+
+    <%- include("partials/footer.ejs") %>
+</body>

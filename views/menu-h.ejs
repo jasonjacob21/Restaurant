@@ -1,0 +1,33 @@
+<%- include("partials/header.ejs") %>
+
+<body>
+    <main>
+        <h2>Menu</h2>
+        <div class="menu-items">
+            <% menuItems.forEach((item, index) => { %>
+                <% if (index % 3 === 0) { %>
+                    <!-- Start a new row -->
+                    <div class="menu-row">
+                <% } %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <img src="<%= item.image_source %>" height="100px" width="100px"  id="menu-img">
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>₹<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                </div>
+                <% if ((index + 1) % 3 === 0 || index === menuItems.length - 1) { %>
+                    <!-- Close the row -->
+                    </div>
+                <% } %>
+            <% }) %>
+        </div>
+    </main>
+    
+</body>
+
+<%- include("partials/footer.ejs") %>

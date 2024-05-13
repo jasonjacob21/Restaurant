@@ -1,0 +1,98 @@
+[
+    {
+        "id": 1,
+        "name": "Butter chicken",
+        "price": 350,
+        "image": "./images/menu/Default_butter_chicken_3.png"
+    },
+    {
+        "id": 2,
+        "name": "Chilli paneer",
+        "price": 300,
+        "image": "./images/menu/Default_chilii_paneer_3.png"
+    },
+    {
+        "id": 3,
+        "name": "Chips and dips",
+        "price": 200,
+        "image": "./images/menu/Default_chips_and_dips_2.png"
+    },
+    {
+        "id": 4,
+        "name": "Spicey meatballs",
+        "price": 250,
+        "image": "./images/menu/Default_spicey_meatballs_1.png"
+    },
+    {
+        "id": 5,
+        "name": "Grilled fish",
+        "price": 400,
+        "image": "./images/menu/grilled.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Hash brown",
+        "price": 150,
+        "image": "./images/menu/HashBrown.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Grilled sandwich",
+        "price": 200,
+        "image": "./images/menu/sandwitch.jpeg"
+    },
+    {
+        "id": 8,
+        "name": "Salmon salad",
+        "price": 400,
+        "image": "./images/menu/salmon-salad-tartines-.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Lemonade",
+        "price": 120,
+        "image": "./images/menu/lemonade.png"
+    },
+    {
+        "id": 10,
+        "name": "Milkshake",
+        "price": 180,
+        "image": "./images/menu/milkshake.png"
+    },
+    {
+        "id": 11,
+        "name": "Soda",
+        "price": 120,
+        "image": "./images/menu/sodapop.jpg"
+    },
+    {
+        "id": 12,
+        "name": "Tofu",
+        "price": 300,
+        "image": "./images/menu/Vegan_Kung_Pao_Tofu_FromMyBowl-12.webp"
+    },
+    {
+        "id": 13,
+        "name": "Coffee",
+        "price": 250,
+        "image": "./images/menu/coffee.jpeg"
+    },
+    {
+        "id": 14,
+        "name": "Hot chocolate",
+        "price":200,
+        "image": "./images/menu/hotch.png"
+    },
+    {
+        "id": 15,
+        "name": "Veg-Chow-Mein",
+        "price": 350,
+        "image": "./images/menu/Veg-Chow-Mein.webp"
+    },
+    {
+        "id": 16,
+        "name": " Chiles en Nogada",
+        "price": 400,
+        "image": "./images/menu/image.png"
+    }
+]

@@ -1,0 +1,180 @@
+<%- include("partials/header-u.ejs") %>
+
+<body>
+    <main>
+        <% if (user) { %>
+            <h2>Welcome, <%= user.username %> !</h2>
+        <% } else { %>
+            <h2>Menu</h2>
+        <% } %>
+          
+        <div class="menu-items">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-item">
+                    <h3><%= item.name %></h3>
+                    <img src="<%= item.image_source %>" height="50px" width="100px"  id="menu-img">
+                    <p>Type: <%= item.type %></p>
+                    <!-- Display price only if it's available and a number -->
+                    <% if (!isNaN(item.price) && item.price !== null) { %>
+                        <p>₹<%= item.price.toFixed(2) %></p>
+                    <% } else { %>
+                        <p>Price not available</p>
+                    <% } %>
+                    <input type="number" min="1" value="1" class="quantity-input">
+                    <!-- Use data attributes to store item ID and price -->
+                    <button class="add-to-cart" data-id="<%= item.id %>" data-name="<%= item.name %>" data-price="<%= item.price %>">Add to Cart</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart">
+            <span class="cart-close-btn" id="cart-close-btn">&times;</span>
+            <h3>Cart</h3>
+            <ul class="cart-items" id="cart-items"></ul>
+            <p>₹Total: <span id="total-price">0.00</span></p>
+            <div id="card-element"></div> <!-- Add this element for the card input -->
+            <form id="checkout-form" action="/orders" method="POST">
+                <!-- Hidden input fields for items, total price, and user ID -->
+                <input type="hidden" name="items" id="items-input" value="">
+                <input type="hidden" name="totalPrice" id="total-price-input" value="">
+                <input type="hidden" name="userId" id="user-id-input" value="<%= user.user_id %>">
+                <!-- Use the button to submit the form -->
+                <button id="checkout-btn" type="button">Checkout</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartCloseBtn = document.getElementById('cart-close-btn');
+            const checkoutForm = document.getElementById('checkout-form');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const itemsInput = document.getElementById('items-input');
+            const totalPriceInput = document.getElementById('total-price-input');
+            const totalPriceSpan = document.getElementById('total-price');
+            const cartItemsList = document.getElementById('cart-items');
+            let cart = [];
+
+            // Close cart sidebar
+            cartCloseBtn.addEventListener('click', () => {
+                cartSidebar.style.right = '-300px';
+            });
+
+            // Add to cart button event listener
+            function handleAddToCart(button) {
+                const itemId = button.getAttribute('data-id');
+                const itemName = button.getAttribute('data-name');
+                const itemPrice = parseFloat(button.getAttribute('data-price'));
+                const itemQuantity = parseInt(button.parentElement.querySelector('.quantity-input').value);
+                
+                const item = {
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: itemQuantity
+                };
+
+                cart.push(item);
+                updateCartUI();
+            }
+
+            function updateCartUI() {
+                cartItemsList.innerHTML = '';
+                let totalPrice = 0;
+
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    const itemName = `${item.name} x ${item.quantity}`;
+                    const itemPrice = (item.price * item.quantity).toFixed(2);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.classList.add('remove-item');
+                    removeBtn.setAttribute('data-id', item.id);
+
+                    removeBtn.addEventListener('click', () => {
+                        const itemId = removeBtn.getAttribute('data-id');
+                        const index = cart.findIndex(cartItem => cartItem.id === itemId);
+                        if (index !== -1) {
+                            cart.splice(index, 1);
+                            updateCartUI();
+                        }
+                    });
+
+                    li.textContent = `${itemName} - $${itemPrice}`;
+                    li.appendChild(removeBtn);
+                    cartItemsList.appendChild(li);
+
+                    totalPrice += parseFloat(itemPrice);
+                });
+
+                totalPriceSpan.textContent = totalPrice.toFixed(2);
+                cartSidebar.style.right = '0';
+            }
+
+            // Add to cart buttons event listener
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    handleAddToCart(button);
+                });
+            });
+
+    // Checkout button event listener
+    checkoutBtn.addEventListener('click', async () => {
+    console.log('Checkout button clicked');
+    // Collect item names and total price
+    const itemNames = cart.map(item => item.name).join(', ');
+    const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+    itemsInput.value = itemNames;
+    totalPriceInput.value = totalPrice.toFixed(2);
+
+    const cartData = {
+        items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        })),
+        totalPrice: totalPrice
+    };
+
+
+     // Store cart data in session storage
+     sessionStorage.setItem('cartData', JSON.stringify(cartData));
+     
+    // Submit the form directly without using checkoutForm.submit()
+    checkoutForm.submit();
+
+    await new Promise(resolve => setTimeout(resolve, 100)); // Wait for a short time (adjust as needed)
+    window.location.href = `/checkout`; // Redirect to the checkout page
+});
+
+// Handle form submission event
+checkoutForm.addEventListener('submit', (event) => {
+    console.log('Form submitted');
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
+   
+});
+
+
+
+
+
+
+
+
+
+
+
+        });
+    </script>
+
+</body>
+
+<%- include("partials/footer.ejs") %>

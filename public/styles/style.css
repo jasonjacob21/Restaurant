@@ -1,0 +1,525 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+
+
+
+
+#logo{
+    border-radius: 100%;
+    font-family: Poppins,Arial;
+    color: gold;
+    font-weight: 500;
+   }
+   .navbar{
+    background-color:black;
+    box-shadow: 0 4px 6px rgba(22,22,26,.18 );
+   }
+   .navbar-link 
+    {
+    color: white !important;
+    }
+
+   .title-1{
+    min-height: 600px;
+   }
+   .main-title{
+    background-image: linear-gradient(rgba(15,23,43,0.9),rgba(15,23,43,0.9)),url(/images/Home/main-back.jpg);
+    height: 600px;
+    background-size: contain;
+   }
+   .heading{
+    color: gold;
+   }
+   #second-heading{
+    color: white;
+   }
+   .rotate{
+    -webkit-animation: spin 10s linear infinite;
+    -moz-animation: spin 10s linear infinite;
+    animation: spin 10s linear infinite;
+   }
+   @-webkit-keyframes spin{
+    100%{-webkit-transform:rotate(360deg);}
+   }
+   @-moz-keyframes spin{
+    100%{-webkit-transform:rotate(360deg);}
+   }
+   @keyframes spin{
+    100%{-webkit-transform:rotate(360deg);}
+   }
+   h1{
+    font-family: 'Protest Strike', sans-serif;
+    font-size: x-large;
+   }
+   nav ul li a{
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  nav ul li a:hover{
+    color:#fea116
+  }
+  nav ul li a::after{
+    content:"";
+    width: 0;
+    height: 2px;
+    background-color: #fea116;
+    transition: 1s;
+    display: block;
+  }
+nav ul li a:hover::after{
+    width: 100%;
+  }
+  
+  .about-right-side{
+    max-width: 600px;
+    padding-bottom: 40px;
+    font-size: 20px;
+  }
+  .flex{
+    display: flex;
+    padding-top: 40px;
+}
+.flex span{
+    content:"";
+    width:1%;
+    
+    padding:3px;
+    display:flex;
+    background-color: #fea116;
+}
+.flex h2{
+    padding:0px 30px;
+    font-size: 50px;
+
+
+}
+.flex h4{
+    font-size: 25px;
+}
+.about-right-side{
+  margin: 8%;
+  margin-top: -20px;
+}
+.about-right-side h3{
+  color: #fea116;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: cursive;
+  margin-bottom: 15px;
+}
+.about-left-side img{
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin: 5px;
+
+}
+.about-left-side .about-img1{
+  width: 200px;
+  height: 200px;
+
+
+}
+.about-left-side .about-img2{
+  width: 200px;
+  height: 180px;
+}
+.about-left-side .about-img3{
+  width: 200px;
+  height: 180px;
+}
+.about-left-side .about-img4{
+  width: 200px;
+  height: 200px;
+}
+.about{
+  display:flex;
+  justify-content: space-between;
+  margin: 10% 5%;
+}
+
+
+/*hear */
+/* Menu */
+
+
+/*menu-end */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.Contact-us{
+  background-color: #3a4348;
+}
+
+.card-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.banner{
+  
+  background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(/images/Reservation/isuru-ranasinha-0HKv_EDkEA8-unsplash.jpg);
+}
+ .banner h2{
+  color: white;
+ }
+
+ .banner button{
+  background-color: #f2475f;
+ }
+ 
+ #book-table-1{
+  font-family: 'Protest Riot', sans-serif;
+  font-weight: 600;
+ }
+
+ #book-table-2{
+  font-family: 'Noto Serif', serif;
+ }
+ #menu-title{
+  font-size: 50px;
+  font-family: 'Protest Riot', sans-serif;
+ }
+ #menu-sub-title{
+  
+  font-size: 1rem;
+  font-weight: 1000;
+  height: 100px;
+ }
+ 
+ .log{
+  text-decoration: none;
+  color: white;
+  font-weight: 300;
+}
+.reg{
+  text-decoration: none;
+  color: black;
+  font-weight: 300;
+}
+
+
+
+
+
+#login-emp body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  
+
+}
+
+#login-emp .login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#login-emp h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#login-emp .input-group {
+  margin-bottom: 15px;
+}
+
+#login-emp .input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#login-emp .input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#login-emp .input-group button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#login-emp .input-group button:hover {
+  background-color: #45a049;
+}
+
+ @media (max-width: 600px) {
+  #login-emp .login-container {
+    max-width: 100%;
+    margin: 50px 0;
+  }
+
+  #login-emp .input-group button {
+    width: 100%;
+  }
+}
+
+
+
+
+
+#sign-emp body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#sign-emp {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#sign-emp form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+}
+
+#sign-emp label {
+  font-weight: bold;
+}
+
+#sign-emp input[type="text"],
+#sign-emp input[type="email"],
+#sign-emp input[type="tel"],
+#sign-emp input[type="password"],
+#sign-emp textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#sign-emp input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#sign-emp input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+@media screen and (max-width: 600px) {
+  #sign-emp form {
+      grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* employee dashboard */
+
+/* Reset CSS */
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body #emp-dashb {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+#emp-dashb .container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#emp-dashb .sidebar {
+  width: 200px;
+  min-width: 200px;
+  background-color: #343a40;
+  color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  
+}
+
+#emp-dashb .sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#emp-dashb .sidebar ul li {
+  margin-bottom: 10px;
+}
+
+#emp-dashb .sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+#emp-dashb .sidebar ul li a:hover {
+  background-color: #007bff;
+}
+
+#emp-dashb .main-content {
+  flex: 1;
+  padding-left: 20px;
+}
+
+#emp-dashb .employee-info {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#emp-dashb .employee-info p {
+  margin-bottom: 10px;
+}
+
+#emp-dashb h2 {
+  margin-bottom: 20px;
+}
+
+
+
+
+/* displaying reservation */
+
+
+#res-disp body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#res-disp .container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#res-disp table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#res-disp table th,
+#res-disp table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#res-disp table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+#login-emp .login-container {
+  background-color: #a5e2d0; /* Change the background color to white */
+  padding: 20px; /* Add padding for spacing */
+  border-radius: 10px; /* Add border-radius for rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
+  
+}
+
+#login-emp .login-container h2 {
+  color: black; /* Change the text color of the heading */
+  font-weight: bolder;
+  font-family: "Times New Roman", Times, serif;
+}
+
+#login-emp .login-container label {
+  color: #333333; /* Change the label text color */
+  font-weight: bolder;
+  font-family: cursive;
+}
+
+#login-emp .login-container input[type="text"],
+#login-emp .login-container input[type="password"] {
+  border: 1px solid black; /* Add a border to input fields */
+  padding: 10px; /* Add padding to input fields */
+  border-radius: 5px; /* Add border-radius to input fields */
+}
+
+#login-emp .login-container input[type="text"]:focus,
+#login-emp .login-container input[type="password"]:focus {
+  border-color: #fea116; /* Change border color on focus */
+}
+
+#register-button a {
+  color: inherit; /* Inherit the color from the parent element */
+  text-decoration: none; /* Remove underline */
+
+}
+
+#register-button a:hover {
+  text-decoration: none; /* Remove underline on hover */
+}
+
+body:not(#login-emp) {
+  background-color: rgba(236, 235, 152, 0.5);
+
+
+ 
+  background-position: center; /* Center the background image */
+}
+
+#sign-emp {
+  background-color: #a5e2d0; /* Light blue background color */
+}
+
+#sign-emp h2 {
+  font-family: Verdana, sans-serif; /* Verdana font for headings */
+  /* Additional styling properties for headings */
+}
+
+#sign-emp label {
+  font-family: cursive; /* Tahoma font for labels */
+  /* Additional styling properties for labels */
+}

@@ -1,0 +1,99 @@
+<%- include("partials/header.ejs") %>
+
+<section class="banner">
+    
+    <div class="container mt-5">
+    <div class="row g-5 justify-content-evenly">
+      <div class="col-lg-8 text-center">
+        <h2 class="text-uppercase fw-bold" id="book-table-1">BOOK YOUR TABLE</h2>
+    
+      <div class="card my-4 ">
+        <div class="row g-0">
+        <div class="col-lg-6 col-md-5">
+            <img src="/images/Reservation/chris-liverani-oCsaxvGCehM-unsplash.jpg" class="card-img img-fluid rounded-start" alt="table" >
+
+        </div>
+        <div class="col-lg-6 col-md-7">
+          <div class="card-body d-flex flex-column">
+            <div class="h-100">
+            <h3 class="card-title my-5" id="book-table-2" >RESERVATION</h3>
+
+            <form action="/reserve"  method="post" >
+              <div class="row mb-3">
+                <div class="col-lg-12 mb-3">
+                  <input type="text" name="name" required class="form-control" placeholder="Name"><br>
+                </div>
+                <div class="col-lg-12 mb-3">
+                  <input type="tel" name="phone" required class="form-control" min="10" max="10"  placeholder="Phone number"><br>
+                </div>
+              </div>
+
+
+              <div class="row mb-3">
+                <div class="col">
+                  <input type="email" name="email" required class="form-control" placeholder="Email"><br>
+                </div>
+                <div class="col">
+                  <input type="date" name="date" required  class="form-control" placeholder="Date" ><br>
+                </div>
+              </div>
+
+
+              <div class="row mb-3">
+                <div class="col">
+                  <input type="number" name="count" min="1" max="8" required  class="form-control" placeholder="Number of customers" ><br>
+                </div>
+
+                <div class="col">
+                  <select id="time" name="time" required class="form-control">
+                    <option value="">Select Time</option>
+                    <option value="08:00">8:00 PM</option>
+                    <option value="09:00">9:00 PM</option>
+                    <option value="10:00">10:00 PM</option>
+                    <!-- Add more options as needed -->
+                  </select>
+                </div>
+                
+                <div class="col">
+                  <button type="submit"  class="btn btn-dark btn-lg">BOOK</button>
+                </div>
+              </div>
+              
+            </form>
+          
+          
+
+
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include("Partials/footer.ejs") %>
